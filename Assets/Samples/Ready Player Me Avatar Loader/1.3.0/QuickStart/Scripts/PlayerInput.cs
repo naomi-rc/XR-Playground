@@ -27,14 +27,14 @@ namespace ReadyPlayerMe.QuickStart
         public void CheckInput()
         {
             
-            /*AxisHorizontal = Input.GetAxis(HORIZONTAL_AXIS);
+            AxisHorizontal = Input.GetAxis(HORIZONTAL_AXIS);
             AxisVertical = Input.GetAxis(VERTICAL_AXIS);
             MouseAxisX = Input.GetAxis(MOUSE_AXIS_X) * mouseSensitivityX;
             MouseAxisY = Input.GetAxis(MOUSE_AXIS_Y) * mouseSensitivityY;
             if (Input.GetButtonDown(JUMP_BUTTON))
             {
                 OnJumpPress?.Invoke();
-            }*/
+            }
         }
     }
 }
