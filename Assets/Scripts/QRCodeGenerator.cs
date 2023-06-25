@@ -5,6 +5,8 @@ using ZXing;
 using ZXing.QrCode;
 using UnityEngine.UI;
 using TMPro;
+using System;
+using System.IO;
 
 public class QRCodeGenerator : MonoBehaviour
 {
@@ -14,13 +16,37 @@ public class QRCodeGenerator : MonoBehaviour
     [SerializeField] private TMP_InputField avatarIDInputField;
     [SerializeField] private TMP_InputField linkedInInputField;
     [SerializeField] private TMP_InputField websteInputField;
+    [SerializeField] private GameObject toastGameObject;
 
     private Texture2D encodedTexture;
+    private string downloadsFolderPath;
+    BusinessCardInfo businessCard;
 
-   
+    private DateTime startTime;
+    private bool QRCodepressed;
+    private int DOWNLOAD_PRESS_DELAY = 2;
+
+
     void Start()
     {
+        downloadsFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        downloadsFolderPath = Path.Combine(downloadsFolderPath, "Downloads");
+
+        Debug.Log("Downloads Folder Path: " + downloadsFolderPath);
+
         encodedTexture = new Texture2D(256, 256);
+    }
+    private void Update()
+    {
+        if (QRCodepressed)
+        {
+            System.TimeSpan timeSpan = System.DateTime.Now - startTime;
+
+            if (timeSpan.Seconds > DOWNLOAD_PRESS_DELAY)
+            {
+                DownloadQRCodeAsImage();
+            }
+        }
     }
 
     private Color32[] Encode(string encodingText, int width, int height)
@@ -48,7 +74,7 @@ public class QRCodeGenerator : MonoBehaviour
 
         RemoveInputErrors(nameInputField);
 
-        BusinessCardInfo businessCard = new BusinessCardInfo(
+        businessCard = new BusinessCardInfo(
             nameInputField.text,
             bioInputField.text,
             avatarIDInputField.text,
@@ -83,5 +109,48 @@ public class QRCodeGenerator : MonoBehaviour
     private void RemoveInputErrors(TMP_InputField inputField)
     {
         inputField.GetComponentInParent<Image>().color = Color.white;
+    }
+    
+    public void OnPressQRCode()
+    {
+        startTime = System.DateTime.Now;
+        QRCodepressed = true;
+    }
+
+    public void DownloadQRCodeAsImage()
+    {
+        QRCodepressed = false;
+        byte[] pgnBytes = encodedTexture.EncodeToPNG();
+
+        string pathName = downloadsFolderPath + "\\QRCode.png";
+        Debug.Log("PATHNAME" + pathName);
+
+        if (!File.Exists(pathName))
+            File.WriteAllBytes(pathName, pgnBytes);
+        else
+            File.Delete(pathName);
+
+
+        if (File.Exists(pathName))
+        {            
+            toastGameObject.GetComponentInChildren<TMP_Text>().text = "QR code downloaded successfully!";
+            toastGameObject.GetComponent<Image>().color = Color.green;
+            toastGameObject.SetActive(true);
+            Invoke("DeactivateToastMessage", 3);
+            Debug.Log("QR code downloaded successfully!");
+        }
+        else
+        {
+            toastGameObject.GetComponentInChildren<TMP_Text>().text = "QR code failed to download.";
+            toastGameObject.GetComponent<Image>().color = Color.red;
+            toastGameObject.SetActive(true);
+            Invoke("DeactivateToastMessage", 3);
+            Debug.LogWarning("QR code failed to download");
+        }
+    }
+
+    private void DeactivateToastMessage()
+    {
+        toastGameObject.SetActive(false);
     }
 }
