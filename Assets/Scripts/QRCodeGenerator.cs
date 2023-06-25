@@ -9,10 +9,15 @@ using TMPro;
 public class QRCodeGenerator : MonoBehaviour
 {
     [SerializeField] private RawImage rawImageReceiver;
-    [SerializeField] private TMP_InputField textInputField;
+    [SerializeField] private TMP_InputField nameInputField;
+    [SerializeField] private TMP_InputField bioInputField;
+    [SerializeField] private TMP_InputField avatarIDInputField;
+    [SerializeField] private TMP_InputField linkedInInputField;
+    [SerializeField] private TMP_InputField websteInputField;
 
     private Texture2D encodedTexture;
 
+   
     void Start()
     {
         encodedTexture = new Texture2D(256, 256);
@@ -31,12 +36,32 @@ public class QRCodeGenerator : MonoBehaviour
         };
 
         return writer.Write(encodingText);
-    }    
+    }
 
-    private void EncodeTextToQRCode ()
+    private void EncodeTextToQRCode()
     {
-        string textWrite = string.IsNullOrEmpty(textInputField.text) ? "Enter some text" : textInputField.text;
-        Color32[] convertPixelToTexture = Encode(textWrite, encodedTexture.width, encodedTexture.height);
+        if (string.IsNullOrEmpty(nameInputField.text))
+        {
+            ShowInputError(nameInputField, "Please enter a name.");
+            return;
+        }
+
+        RemoveInputErrors(nameInputField);
+
+        BusinessCardInfo businessCard = new BusinessCardInfo(
+            nameInputField.text,
+            bioInputField.text,
+            avatarIDInputField.text,
+            linkedInInputField.text,
+            websteInputField.text
+            );
+
+        string businessCardInfoText = businessCard.SaveToString();
+        
+        Debug.Log("Object info: " + businessCard.m_name + " " + businessCard.m_bio + " " + businessCard.m_avatarID + " " + businessCard.m_linkedIn + " " + businessCard.m_website);
+        Debug.Log("JSON info: " + businessCardInfoText);
+
+        Color32[] convertPixelToTexture = Encode(businessCardInfoText, encodedTexture.width, encodedTexture.height);
         encodedTexture.SetPixels32(convertPixelToTexture);
         encodedTexture.Apply();
 
@@ -46,5 +71,17 @@ public class QRCodeGenerator : MonoBehaviour
     public void OnClickEncode()
     {
         EncodeTextToQRCode();
+    }
+
+    private void ShowInputError(TMP_InputField inputField, string errorMessage)
+    {
+        TMP_Text placeholder = inputField.placeholder.GetComponent<TMP_Text>();
+        placeholder.text = errorMessage;
+        inputField.GetComponentInParent<Image>().color = Color.red;
+    }
+
+    private void RemoveInputErrors(TMP_InputField inputField)
+    {
+        inputField.GetComponentInParent<Image>().color = Color.white;
     }
 }
