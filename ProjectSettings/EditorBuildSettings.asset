@@ -4,7 +4,22 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/QRCodeReader.unity
+    guid: 13f8a3e3eabf57c458f37bb4d54d6706
+  - enabled: 1
+    path: Assets/Scenes/ARContactCard.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/ScanHistory.unity
+    guid: cbe20ceec7ec9a645b3c763941c063b8
+  - enabled: 1
+    path: Assets/Scenes/QRCodeGenerator.unity
+    guid: 057bfcaf046cb0f4db18721a8ca0091d
+  - enabled: 1
+    path: Assets/Scenes/InfoScene.unity
+    guid: 536703d1ebcf33d42bec822afa2a8285
   m_configObjects:
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 44740592d31ad6e41a7b28924b037f9b, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 54e95e1fa2268c54783b6cc40f95d80a, type: 2}
