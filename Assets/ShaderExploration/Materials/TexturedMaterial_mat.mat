@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TexturedMaterial_mat
-  m_Shader: {fileID: -6465566751694194690, guid: 610873d0a9a631a46bacbef83aefa0ad, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 339e13f119e84bd41a4d8a7bdd3715e7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -61,7 +61,7 @@ Material:
     - _Threshold: 0
     m_Colors:
     - _Base_Color: {r: 0, g: 0, b: 0, a: 0}
-    - _My_Base_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _My_Base_Color: {r: 0, g: 1, b: 0.0061872005, a: 1}
     - _Scroll_Velocity: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &3632465229506831239
